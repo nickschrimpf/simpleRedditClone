@@ -2,7 +2,7 @@ var env = require('dotenv')
 var express = require('express');
 var router = express.Router();
 // var db = require('monk')('PROCESS.ENV.database');
-var db = require('monk')('mongodb://redditclone:redditclone@ds023000.mlab.com:23000/simpleredditclone');
+var db = require('monk')('mongodb://heroku_cmlzqbj1:6mt3jbagi3vg91ei9gc2mijsj@ds021650.mlab.com:21650/heroku_cmlzqbj1');
 // var db = require('monk')('localhost/redditClone');
 
 var posts = db.get('posts');

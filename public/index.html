@@ -5,10 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.4/angular.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
 
     <link rel="stylesheet" href="stylesheets/style.css">
+
     <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-route.min.js'></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.js"></script>
 
     <title></title>
 </head>
@@ -54,7 +59,7 @@
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div class='col-md-10 col-md-offset-1 well well-lg' ng-show='toggleForm'>
+    <div class='col-md-10 col-md-offset-1 well well-lg' ng-cloak ng-show='toggleForm'>
         <h3>Title:</h3>
             <input ng-model='title' name='title' class='col-md-11' placeholder='ie. Yosemite at Sunrise' type='text' ng-required><br>
         <h3>Author:</h3>
@@ -67,29 +72,53 @@
         <br>
         <button ng-click='submit()'>Submit Post</button>
     </div>
-        <div class='col-md-10 col-md-offset-1 well well-md' ng-repeat="post in posts | orderBy : '-votes' ">
+        <div ng-cloak id="posts" class='col-md-10 col-md-offset-1' ng-animate="'animate'" ng-repeat="post in posts | orderBy : '-votes' ">
           <div class="row">
-              <div class="col-md-1">
-                <span  ng-click='downVote()' class="glyphicon glyphicon-arrow-down"></span><span ng-click='upVote()' class="glyphicon glyphicon-arrow-up"></span>
-                
+            <div class="col-md-4">
+              <img ng-srcset={{post.url}}>
+            </div>
+              <div class="col-md-8">
+                <strong>{{post.title}} |</strong>
+                <span ng-click='downVote(post._id)' class="glyphicon glyphicon-arrow-down"></span><span ng-click='upVote(post._id)' class="glyphicon glyphicon-arrow-up"></span><span ng-class="{'downvote':post.votes < 0,'upvote':post.votes > 0}"> {{post.votes}} </span><span>| </span>
+                <i>by:</i>{{post.author}}
               </div>
-              <div class="col-md-1">
-                  <p>Votes:{{post.votes}}</p>
-              </div>
-              <div class="col-md-7 text-center">
-                <h2><strong>{{post.title}}</strong></h2>
-                <i>Posted<span am-time-ago='post.date'></span></i>
-              </div>
-              <div class="col-md-3">
-                <h3><i>by:</i>{{post.author}}</h3>
-                 <i>Posted<span am-time-ago='post.date'></span></i></br>
-              </div>
-          </div>
-            <img class='pull-left' ng-srcset={{post.url}}>
-            <div class="col-md-8">
+            <div class="col-md-7">
+              </br>
                <p>{{post.description}}</p>
             </div>
+            <div class="col-md-8 col-md-offset-4">
+               <span class="glyphicon glyphicon-calendar"> </span><span am-time-ago='post.date'></span>
+              | <span ng-click=toggleComments=!toggleComments class="glyphicon glyphicon-comment"></span>
+              <span>{{post.comments.length}} |</span>
+              <span ng-click=toggleComment=!toggleComment class="glyphicon glyphicon-pencil"></span> add a comment
+            </div>
+            
+
+            <div class='col-md-10 col-md-offset-1 well well-lg' ng-show='toggleComment'>
+              <h3>Comment:</h3>
+              <input ng-model='comment'  class='col-md-11' placeholder='This is so cool' type='text' ng-required><br>
+              <h3>Author:</h3>
+              <input ng-model='commentAuthor'  class='col-md-11' placeholder='Author'type='text'><br>
+          
+            <br>
+            <br>
+        <button ng-click='submitComment(post._id)'>Submit Comment</button>
+    </div>
+          <div id="comments" ng-show='toggleComments' class="col-md-12"  ng-repeat='comment in post.comments'>
+            <div class="col-md-4 text-center">
+              
+              "{{comment.comment}}"
+            </div>
+            <div class="col-md-4">
+              <i>by:</i>{{comment.commentAuthor}}
+            </div>
+            <div class="col-md-4 text-center">
+              <span am-time-ago='comment.date'></span>
+            </div>
+              
+            </div>
         </div>
+        
 
     
 

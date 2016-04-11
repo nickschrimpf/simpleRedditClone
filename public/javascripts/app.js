@@ -1,4 +1,4 @@
-angular.module('redditClone', ['angular-momentjs'])
+angular.module('redditClone', ['angular-momentjs','ngAnimate','ngRoute'])
     .config(function($momentProvider){
         $momentProvider
       .asyncLoading(false)
